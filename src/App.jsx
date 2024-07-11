@@ -30,7 +30,7 @@ const App = () => {
   }, [query, units]);
 
   const setBackgroundBasedOnWeather = (weather) => {
-    if (topCities.includes(query.q.toLowerCase())) {
+    if (query && query.q && topCities.includes(query.q.toLowerCase())) {
       setBackground('from-cyan-500 to-blue-700');
     } else {
       const threshold = units === 'metric' ? 20 : 60;
