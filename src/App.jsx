@@ -1,4 +1,6 @@
+// App.jsx
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import TopButtons from './components/TopButtons';
 import Inputs from './components/Inputs';
 import TimeAndLocation from './components/TimeAndLocation';
@@ -20,6 +22,7 @@ const App = () => {
         const data = await getFormattedWeatherData({ ...query, units });
         setWeather(data);
         setBackgroundBasedOnWeather(data);
+        saveWeatherData(data); // Save weather data to backend
       } catch (error) {
         console.error('Error fetching weather data:', error);
         setWeather(null); // Handle error state as needed
@@ -34,8 +37,31 @@ const App = () => {
       setBackground('from-cyan-500 to-blue-700');
     } else {
       const threshold = units === 'metric' ? 20 : 60;
-      const newBackground = weather.temp <= threshold ? 'from-cyan-500 to-blue-700' : 'from-yellow-600 to-orange-700';
+      const newBackground =
+        weather.temp <= threshold
+          ? 'from-cyan-500 to-blue-700'
+          : 'from-yellow-600 to-orange-700';
       setBackground(newBackground);
+    }
+  };
+
+  const saveWeatherData = async (weatherData) => {
+    try {
+      const response = await axios.post('http://localhost:5000/api/weather', {
+        cityName: query.q,
+        date: weatherData.formattedLocalTime, // Assuming formattedLocalTime is the date you want to store
+        minTemp: weatherData.temp_min,
+        maxTemp: weatherData.temp_max,
+        windSpeed: weatherData.speed,
+        humidity: weatherData.humidity,
+        sunrise: weatherData.sunrise,
+        sunset: weatherData.sunset,
+        feelsLike: weatherData.feels_like,
+      });
+
+      console.log('Weather data saved successfully:', response.data);
+    } catch (error) {
+      console.error('Error saving weather data:', error);
     }
   };
 
