@@ -1,3 +1,9 @@
 node_modules
 .env
 package-lock.json
+./src/assets/cloudy.jpg
+./src/assets/mist.jpg  
+./src/assets/rainy.jpeg
+./src/assets/snow.png  
+./src/assets/sunny.jpg
+ ./src/assets/ThunderStrom.jpg
